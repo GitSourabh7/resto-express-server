@@ -1,15 +1,11 @@
 const express = require("express");
 const app = express();
 const port = 3000;
-const mysql = require("mysql2");
+const cors = require("cors");
+const db = require("./connection");
 
-// Create a MySQL connection
-const db = mysql.createConnection({
-  host: "127.0.0.1",
-  user: "root",
-  password: "password",
-  database: "resto",
-});
+// Use the cors middleware with default options
+app.use(cors());
 
 // Connect to the MySQL database
 db.connect((err) => {
