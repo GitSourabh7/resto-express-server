@@ -40,9 +40,10 @@ app.get("/category", (req, res) => {
       res.status(500).send("Error fetching categories from category");
       return;
     }
+    const category = results.map((item) => item.category);
 
     // Send the data as JSON
-    res.json(results);
+    res.json(category);
   });
 });
 
