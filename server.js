@@ -13,7 +13,7 @@ db.connect((err) => {
     console.error("Error connecting to MySQL:", err);
     return;
   }
-  console.log("Connected to MySQL database");
+  console.log("Connected to MySQL Resto database");
 });
 
 // Define a route to fetch data from the database
@@ -22,7 +22,22 @@ app.get("/menu", (req, res) => {
   db.query("SELECT * FROM menu", (err, results) => {
     if (err) {
       console.error("Error executing MySQL query:", err);
-      res.status(500).send("Error fetching data from database");
+      res.status(500).send("Error fetching menus from menu");
+      return;
+    }
+
+    // Send the data as JSON
+    res.json(results);
+  });
+});
+
+// Define a route to fetch data from the database
+app.get("/category", (req, res) => {
+  // Query the database
+  db.query("SELECT * FROM category", (err, results) => {
+    if (err) {
+      console.error("Error executing MySQL query:", err);
+      res.status(500).send("Error fetching categories from category");
       return;
     }
 
