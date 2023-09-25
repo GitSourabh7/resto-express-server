@@ -6,6 +6,7 @@ const router = express.Router();
 router.post("/signup", (req, res) => {
   // Parse user data from the request body
   const userData = req.body;
+  console.log(userData);
 
   // Implement your signup logic here, e.g., save the user to the database
   // You should perform validations, hash passwords, etc., as needed
