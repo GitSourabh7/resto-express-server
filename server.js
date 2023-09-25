@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const cors = require("cors");
-const db = require("./connection");
+const db = require("./db");
 
 // Use the cors middleware with default options
 app.use(cors());
