@@ -1,3 +1,4 @@
+// signupRoutes.js (Routes for Signup)
 const express = require("express");
 const router = express.Router();
 const connectionPool = require("../db");
@@ -30,6 +31,16 @@ router.post("/signup", validateSignUp, async (req, res) => {
 
     // Use the database connection pool
     const pool = connectionPool.promise();
+
+    // Check if the email already exists in the database
+    const [existingUsers] = await pool.execute(
+      "SELECT * FROM users WHERE email = ?",
+      [email]
+    );
+
+    if (existingUsers.length > 0) {
+      return res.status(400).json({ message: "Email address already in use" });
+    }
 
     // Insert the user data into the MySQL database
     const [result] = await pool.execute(
