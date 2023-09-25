@@ -1,4 +1,3 @@
-// app.js (Main Application)
 const express = require("express");
 const app = express();
 const port = 3000;
@@ -16,27 +15,29 @@ app.use(cors());
 // Middleware to parse JSON request bodies
 app.use(express.json());
 
-// Connect to the MySQL database
-db.getConnection((err, connection) => {
-  if (err) {
-    console.error("Error connecting to MySQL:", err);
-    return;
-  }
-  console.log("Connected to MySQL Resto database");
-
-  // Release the connection to the pool when done using it
-  connection.release();
+// Define a route
+app.get("/", (req, res) => {
+  res.send("Hello, World!");
 });
+
+// Connect to the MySQL database
+async function connectToDatabase() {
+  try {
+    await db.promise().query("SELECT 1");
+    console.log("Connected to MySQL Resto database");
+  } catch (error) {
+    console.error("Error connecting to MySQL:", error);
+    process.exit(1); // Exit the application on database connection failure
+  }
+}
+
+// Initialize the database connection
+connectToDatabase();
 
 // Use the route files
 app.use("/", menuRoutes);
 app.use("/", categoryRoutes);
 app.use("/", signupRoutes);
-
-// Define a route
-app.get("/", (req, res) => {
-  res.send("Hello, World!");
-});
 
 // Start the Express server
 app.listen(port, () => {
