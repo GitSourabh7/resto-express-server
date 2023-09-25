@@ -7,6 +7,7 @@ const db = mysql.createPool({
   user: "root",
   password: "password",
   database: "resto",
+  connectionLimit: 10, // Adjust as needed
 });
 
 module.exports = db;
