@@ -3,6 +3,7 @@ const router = express.Router();
 const connectionPool = require("../db");
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken"); // Import the jsonwebtoken library
 
 // Validation middleware for login data
 const validateLogin = [
@@ -42,9 +43,14 @@ router.post("/login", validateLogin, async (req, res) => {
       return res.status(401).json({ message: "Incorrect password" });
     }
 
-    // You can create a JWT token for user authentication here if needed
+    // Create a JWT token for user authentication
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      "your_secret_key_here", // Replace with your secret key
+      { expiresIn: "1h" } // Token expiration time (e.g., 1 hour)
+    );
 
-    res.status(200).json({ message: "Login successful", user });
+    res.status(200).json({ message: "Login successful", user, token });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ message: "Error during login" });
