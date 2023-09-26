@@ -1,9 +1,9 @@
-// signupRoutes.js (Routes for Signup)
 const express = require("express");
 const router = express.Router();
 const connectionPool = require("../db");
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
+const axios = require("axios");
 
 // Validation middleware for signup data
 const validateSignUp = [
@@ -42,10 +42,14 @@ router.post("/signup", validateSignUp, async (req, res) => {
       return res.status(400).json({ message: "Email address already in use" });
     }
 
-    // Insert the user data into the MySQL database
+    // Generate a random image URL using Lorem Picsum
+    const randomImageResponse = await axios.get("https://picsum.photos/200");
+    const avatarUrl = randomImageResponse.request.res.responseUrl;
+
+    // Insert the user data into the MySQL database, including the random image URL
     const [result] = await pool.execute(
-      "INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)",
-      [firstName, lastName, email, hashedPassword]
+      "INSERT INTO users (first_name, last_name, email, password, avatar_url) VALUES (?, ?, ?, ?, ?)",
+      [firstName, lastName, email, hashedPassword, avatarUrl]
     );
 
     // Check if the user was successfully inserted
