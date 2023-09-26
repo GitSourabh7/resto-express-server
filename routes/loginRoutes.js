@@ -12,9 +12,6 @@ const validateLogin = [
 
 router.post("/login", validateLogin, async (req, res) => {
   try {
-    // Log the request object
-    console.log("Request Object:", req);
-
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -46,9 +43,6 @@ router.post("/login", validateLogin, async (req, res) => {
     }
 
     // You can create a JWT token for user authentication here if needed
-
-    // Log the response object
-    console.log("Response Object:", res);
 
     res.status(200).json({ message: "Login successful", user });
   } catch (error) {
