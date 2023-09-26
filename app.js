@@ -6,6 +6,7 @@ const cors = require("cors");
 const menuRoutes = require("./routes/menuRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const signupRoutes = require("./routes/signupRoutes");
+const loginRoutes = require("./routes/loginRoutes"); // Import the loginRoutes
 
 const db = require("./db");
 
@@ -38,6 +39,7 @@ connectToDatabase();
 app.use("/", menuRoutes);
 app.use("/", categoryRoutes);
 app.use("/", signupRoutes);
+app.use("/", loginRoutes); // Use the loginRoutes
 
 // Start the Express server
 app.listen(port, () => {
