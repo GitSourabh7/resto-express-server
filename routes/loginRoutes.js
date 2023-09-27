@@ -3,7 +3,7 @@ const router = express.Router();
 const connectionPool = require("../db");
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken"); // Import the jsonwebtoken library
+const jwt = require("jsonwebtoken");
 
 // Validation middleware for login data
 const validateLogin = [
@@ -27,7 +27,7 @@ router.post("/login", validateLogin, async (req, res) => {
 
     // Check if the user with the given email exists in the database
     const [existingUsers] = await pool.execute(
-      "SELECT * FROM users WHERE email = ?",
+      "SELECT id, first_name, last_name, email, avatar_url, password FROM users WHERE email = ?",
       [email]
     );
 
@@ -46,11 +46,22 @@ router.post("/login", validateLogin, async (req, res) => {
     // Create a JWT token for user authentication
     const token = jwt.sign(
       { userId: user.id, email: user.email },
-      "your_secret_key_here", // Replace with your secret key
-      { expiresIn: "1h" } // Token expiration time (e.g., 1 hour)
+      "your_secret_key_here",
+      { expiresIn: "1h" }
     );
 
-    res.status(200).json({ message: "Login successful", user, token });
+    // Include user data in the response
+    res.status(200).json({
+      message: "Login successful",
+      user: {
+        id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        avatar_url: user.avatar_url,
+      },
+      token,
+    });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ message: "Error during login" });
