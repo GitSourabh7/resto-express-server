@@ -41,4 +41,38 @@ router.post("/cart/add-to-cart", (req, res) => {
   });
 });
 
+// Define a route to remove an item from the cart
+router.delete("/cart/remove-from-cart", (req, res) => {
+  // Get data from the request body
+  const { user_id, product_id } = req.body;
+
+  // Check if all required fields are provided
+  if (!user_id || !product_id) {
+    res.status(400).send("Both user_id and product_id are required");
+    return;
+  }
+
+  // Delete the item from the cart_items table based on user_id and product_id
+  const deleteQuery =
+    "DELETE FROM cart_items WHERE user_id = ? AND product_id = ?";
+  const values = [user_id, product_id];
+
+  db.query(deleteQuery, values, (err, results) => {
+    if (err) {
+      console.error("Error executing MySQL query:", err);
+      res.status(500).send("Error removing item from the cart");
+      return;
+    }
+
+    // Check if any rows were affected (item was found and deleted)
+    if (results.affectedRows === 0) {
+      res.status(404).send("Item not found in the cart");
+      return;
+    }
+
+    // Send a success response
+    res.status(200).send("Item removed from cart successfully");
+  });
+});
+
 module.exports = router;
