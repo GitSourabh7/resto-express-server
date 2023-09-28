@@ -75,4 +75,44 @@ router.delete("/cart/remove-from-cart", (req, res) => {
   });
 });
 
+// Define a route to increase the quantity
+router.post("/cart/increase-quantity", (req, res) => {
+  const { user_id, product_id } = req.body;
+
+  // Update the quantity in the cart_items table based on user_id and product_id
+  const updateQuery =
+    "UPDATE cart_items SET quantity = quantity + 1 WHERE user_id = ? AND product_id = ?";
+  const values = [user_id, product_id];
+
+  db.query(updateQuery, values, (err, results) => {
+    if (err) {
+      console.error("Error executing MySQL query:", err);
+      res.status(500).send("Error increasing quantity");
+      return;
+    }
+
+    res.status(200).send("Quantity increased successfully");
+  });
+});
+
+// Define a route to decrease the quantity
+router.post("/cart/decrease-quantity", (req, res) => {
+  const { user_id, product_id } = req.body;
+
+  // Update the quantity in the cart_items table based on user_id and product_id
+  const updateQuery =
+    "UPDATE cart_items SET quantity = quantity - 1 WHERE user_id = ? AND product_id = ?";
+  const values = [user_id, product_id];
+
+  db.query(updateQuery, values, (err, results) => {
+    if (err) {
+      console.error("Error executing MySQL query:", err);
+      res.status(500).send("Error decreasing quantity");
+      return;
+    }
+
+    res.status(200).send("Quantity decreased successfully");
+  });
+});
+
 module.exports = router;
