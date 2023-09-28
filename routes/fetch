@@ -57,7 +57,7 @@ router.get("/cart", async (req, res) => {
       return menuItem;
     });
 
-    res.status(200).json(cartWithQuantity);
+    res.status(200).json({ cartWithQuantity });
   } catch (error) {
     console.error("Error fetching cart items:", error);
     res.status(500).json({ message: "Error fetching cart items" });
