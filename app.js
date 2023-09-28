@@ -8,6 +8,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const signupRoutes = require("./routes/signupRoutes");
 const loginRoutes = require("./routes/loginRoutes");
 const cartRoutes = require("./routes/cartRoutes");
+const cart = require("./routes/fetchCart");
 
 const db = require("./db");
 
@@ -42,6 +43,7 @@ app.use("/", categoryRoutes);
 app.use("/", signupRoutes);
 app.use("/", loginRoutes);
 app.use("/", cartRoutes);
+app.use("/", cart);
 
 // Start the Express server
 app.listen(port, () => {
