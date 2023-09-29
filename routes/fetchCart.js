@@ -14,7 +14,6 @@ router.use("/cart", (req, res, next) => {
 router.get("/cart", async (req, res) => {
   try {
     const userId = req.header("X-User-ID"); // Get the user ID from the header
-    console.log(userId);
 
     if (!userId) {
       return res
@@ -31,7 +30,10 @@ router.get("/cart", async (req, res) => {
       [userId]
     );
 
-    console.log(cartItems);
+    // Check if cartItems is empty, and if so, return an empty array
+    if (cartItems.length === 0) {
+      return res.status(200).json([]);
+    }
 
     // Extract product_ids and quantities from the result
     const cartData = cartItems.map((item) => ({
